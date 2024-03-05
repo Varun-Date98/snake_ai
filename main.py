@@ -1,5 +1,6 @@
 import sys
 import pygame
+import numpy as np
 from game import Game
 from settings import N_CELLS, CELL_SIZE, GRASS_DARK, GAME_BACKGROUND
 
@@ -27,18 +28,18 @@ class SnakeAI:
                 sys.exit()
 
         # Move the snake action => [straight, left, right]
-        if action[0] == 1:
+        if np.array_equal(action, [1, 0, 0]):
             self.game.snake.move_straight()
-        elif action[1] == 1:
+        elif np.array_equal(action, [0, 1, 0]):
             self.game.snake.left_turn()
-        elif action[2] == 1:
+        elif np.array_equal(action, [0, 0, 1]):
             self.game.snake.right_turn()
 
         # Check for game over conditions
         reward = 0
         game_over = False
 
-        if self.game.check_game_over() or self.frame_iterations > len(self.game.snake) * 100:
+        if self.is_game_over() or self.frame_iterations > len(self.game.snake) * 100:
             reward -= 10
             game_over = True
             return game_over, reward, self.game.score()
@@ -65,3 +66,6 @@ class SnakeAI:
         self.game.draw_elements(self.screen)
         pygame.display.update()
         self.clock.tick(60)
+
+    def is_game_over(self) -> bool:
+        return self.game.check_game_over()
