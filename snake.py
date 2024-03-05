@@ -26,26 +26,23 @@ class Snake:
         head = self.body[0]
         self.body = [head + self.direction] + self.body
 
-    def move_up(self):
-        if self.direction.y == 1:
-            return
+    def move_straight(self):
+        self.direction = self.direction
 
-        self.direction = Vector2(0, -1)
+    def left_turn(self):
+        # 1 0 -> move right -> 0 -1
+        # 0 1 -> move down -> 1 0
+        # -1 0 -> move left -> 0 1
+        # 0 -1 -> move up -> -1 0
+        x = self.direction.x
+        y = self.direction.y
+        self.direction = Vector2(y, -x)
 
-    def move_left(self):
-        if self.direction.x == 1:
-            return
-
-        self.direction = Vector2(-1, 0)
-
-    def move_down(self):
-        if self.direction.y == -1:
-            return
-
-        self.direction = Vector2(0, 1)
-
-    def move_right(self):
-        if self.direction.x == -1:
-            return
-
-        self.direction = Vector2(1, 0)
+    def right_turn(self):
+        # 1 0 -> move right -> 0 1
+        # 0 1 -> move down -> -1 0
+        # -1 0 -> move left -> 0 -1
+        # 0 -1 -> move up -> 1 0
+        x = self.direction.x
+        y = self.direction.y
+        self.direction = Vector2(-y, x)

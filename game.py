@@ -1,7 +1,4 @@
-import sys
-
 import pygame
-
 from food import Food
 from settings import FONT, N_CELLS, CELL_SIZE
 from snake import Snake
@@ -31,21 +28,25 @@ class Game:
         return False
 
     def check_game_over(self):
+        game_over = False
         head = self.snake.body[0]
 
         # Check if head is out of bounds
         if not (0 <= head.x < N_CELLS) or not (0 <= head.y < N_CELLS):
-            pygame.quit()
-            sys.exit()
+            game_over = True
 
         for block in self.snake.body[1:]:
             if head == block:
-                pygame.quit()
-                sys.exit()
+                game_over = True
+
+        return game_over
 
     def draw_score(self, screen: pygame.display, font: pygame.font.Font):
-        score = f"Score: {len(self.snake) - 3}"
+        score = f"Score: {self.score()}"
         score_x, score_y = CELL_SIZE * N_CELLS - 120, 40
         score_surface = font.render(score, True, (56, 74, 12))
         score_rectangle = score_surface.get_rect(center=(score_x, score_y))
         screen.blit(score_surface, score_rectangle)
+
+    def score(self):
+        return len(self.snake) - 3
